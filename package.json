@@ -1,8 +1,8 @@
 {
-  "name": "node-avrcp",
+  "name": "node-phony",
   "version": "0.0.1",
-  "description": "Package to communitcate with the Bluetooth AVRCP protocol",
-  "main": "index.js",
+  "description": "Package to communitcate with the Bluetooth AVRCP and HFP protocol",
+  "main": "dist/phony.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },

@@ -64,7 +64,7 @@ service_uuids = {
   MessageAccessNotification: '00001134-0000-1000-8000-00805f9b34fb'
 }
 
-module.exports = (AVRCP) ->
+module.exports = (Phony) ->
   {
     SERVICE_UUIDS: service_uuids
 
@@ -82,31 +82,31 @@ module.exports = (AVRCP) ->
       )
       return serviceNames
 
-    parseSignal: (avrcp, path, iface, signal, args) ->
+    parseSignal: (phony, path, iface, signal, args) ->
       signalDebug "Received Signal \"#{signal}\" from #{args[0]}"
       signalDebug args
       signalDebug path
       signalDebug iface
       args.splice(0, 1) if args.length > 1
       signal = signal.charAt(0).toLowerCase() + signal.substring(1)
-      avrcp.emit(signal, {
+      phony.emit(signal, {
         interface: iface,
         args: args,
         path: path,
       })
 
-    registerHandlers: (avrcp) ->
+    registerHandlers: (phony) ->
       debug "Registering handlers..."
       return Promise.all([
-        @registerHandler(avrcp, '/org/bluez', 'org.freedesktop.DBus.Properties', avrcp.adapter)
-        @registerHandler(avrcp, '/org/bluez', "#{AVRCP.BUS_SERVICE}.Adapter1", avrcp.adapter)
-        @registerHandler(avrcp, '/org/bluez/hci0', "#{AVRCP.BUS_SERVICE}.Device1", avrcp.adapter)
+        @registerHandler(phony, '/org/bluez', 'org.freedesktop.DBus.Properties', phony.adapter)
+        @registerHandler(phony, '/org/bluez', "#{Phony.BUS_SERVICE}.Adapter1", phony.adapter)
+        @registerHandler(phony, '/org/bluez/hci0', "#{Phony.BUS_SERVICE}.Device1", phony.adapter)
       ])
 
-    registerHandler: (avrcp, path, iface, sigIface, service = AVRCP.BUS_SERVICE) ->
+    registerHandler: (phony, path, iface, sigIface, service = Phony.BUS_SERVICE) ->
       new Promise( (resolve, reject) ->
         debug "Registering new #{iface} signal handler..."
-        avrcp.bus.registerSignalHandler(service, path, iface, sigIface, (err) ->
+        phony.bus.registerSignalHandler(service, path, iface, sigIface, (err) ->
           debug('ERROR:', err) if err
           debug "Registered #{iface} signal handler." if !err
           if !err
@@ -116,14 +116,14 @@ module.exports = (AVRCP) ->
         )
       )
 
-    getInterface: (avrcp, path, ifaceName, service = AVRCP.BUS_SERVICE) ->
+    getInterface: (phony, path, ifaceName, service = Phony.BUS_SERVICE) ->
       new Promise( (resolve, reject) =>
         debug "Looking for interface #{ifaceName}..."
-        avrcp.bus.getInterface(service, path, ifaceName, (err, iface) =>
+        phony.bus.getInterface(service, path, ifaceName, (err, iface) =>
           debug "Error for #{ifaceName}", err if err
           debug "Got interface #{ifaceName}" if !err
           if !err
-            @registerHandler(avrcp, path, ifaceName, iface).then( ->
+            @registerHandler(phony, path, ifaceName, iface).then( ->
               return resolve iface
             , (err) ->
               debug "Error for #{ifaceName}", err if err
@@ -135,14 +135,14 @@ module.exports = (AVRCP) ->
         )
       )
 
-    getSessInterface: (avrcp, path, ifaceName, service = AVRCP.BUS_SERVICE) ->
+    getSessInterface: (phony, path, ifaceName, service = Phony.BUS_SERVICE) ->
       new Promise( (resolve, reject) =>
         debug "Looking for interface #{ifaceName}..."
-        avrcp.sess.getInterface(service, path, ifaceName, (err, iface) =>
+        phony.sess.getInterface(service, path, ifaceName, (err, iface) =>
           debug "Error for #{ifaceName}", err if err
           debug "Got interface #{ifaceName}" if !err
           if !err
-            @registerHandler(avrcp, path, ifaceName, iface).then( ->
+            @registerHandler(phony, path, ifaceName, iface).then( ->
               return resolve iface
             , (err) ->
               debug "Error for #{ifaceName}", err if err
@@ -167,7 +167,7 @@ module.exports = (AVRCP) ->
           })
 
     findServiceUUID: (device) ->
-      serviceIndex = device.UUIDs.indexOf(AVRCP.SERVICE_UUID)
+      serviceIndex = device.UUIDs.indexOf(Phony.SERVICE_UUID)
       if serviceIndex is -1
         return false
       else

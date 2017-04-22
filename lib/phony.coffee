@@ -7,28 +7,28 @@ util = require 'util'
 {EventEmitter} = require 'events'
 vCard = require 'vcard-json'
 
-# Bluetooth AVRCP controller that extends the {EventEmitter} prototype.
+# Bluetooth AVRCP/HFP controller that extends the {EventEmitter} prototype.
 #
 # @example How to use
-#   avrcp = new AVRCP()
-#     avrcp.on('ready', ->
-#     avrcp.setPairable(true)
-#     avrcp.setDiscoverable(true).then(() ->
-#       avrcp.discovery(true)
+#   phony = new Phony()
+#     phony.on('ready', ->
+#     phony.setPairable(true)
+#     phony.setDiscoverable(true).then(() ->
+#       phony.discovery(true)
 #       setTimeout(->
-#         avrcp.discovery(false)
+#         phony.discovery(false)
 #       , 50000)
 #     )
 #   )
 #
-#   avrcp.on('propertiesChanged', (a) ->
+#   phony.on('propertiesChanged', (a) ->
 #     console.log a.args[0]
 #   )
 #
-#   avrcp.on('deviceFound', (a) ->
-#     avrcp.selectDevice(a).then( ->
-#       avrcp.discovery(false)
-#       avrcp.getMediaPlayer().then((mp) ->
+#   phony.on('deviceFound', (a) ->
+#     phony.selectDevice(a).then( ->
+#       phony.discovery(false)
+#       phony.getMediaPlayer().then((mp) ->
 #         mp.play()
 #         mp.getTrack().then((track) ->
 #           console.log track
@@ -36,7 +36,7 @@ vCard = require 'vcard-json'
 #       )
 #     )
 #   )
-class AVRCP extends EventEmitter
+class Phony extends EventEmitter
 
   # Default service UUID
   @SERVICE_UUID: null
@@ -414,11 +414,11 @@ class AVRCP extends EventEmitter
       @currentCall = null
 
 
-  # AVRCP Class to controle audio of a bluetooth device.
+  # Phony Class to controle audio of a bluetooth device.
   #
   # @param  {string} serviceUUID=0000110b - ServiceUUID to connect to.
   #
-  # @return {AVRCP} Class Instance
+  # @return {Phony} Class Instance
   constructor: (serviceUUID) ->
     if serviceUUID
       @SERVICE_UUID = serviceUUID.toLowerCase()
@@ -460,32 +460,32 @@ class AVRCP extends EventEmitter
     return
 
 # @message Put the utils to the end so we can use the class variables
-utils = require('./utils')(AVRCP)
+utils = require('./utils')(Phony)
 
-# avrcp = new AVRCP()
-# avrcp.on('ready', ->
-#   avrcp.setPairable(true)
-#   avrcp.setDiscoverable(true)
+# phony = new Phony()
+# phony.on('ready', ->
+#   phony.setPairable(true)
+#   phony.setDiscoverable(true)
 # )
 #
-# avrcp.on('propertiesChanged', (a) ->
+# phony.on('propertiesChanged', (a) ->
 #   console.log a.args[0]
 # )
 #
-# avrcp.on('deviceFound', (a) ->
+# phony.on('deviceFound', (a) ->
 #   if a.device.Name.indexOf('Galaxy') isnt -1
-#     avrcp.selectDevice(a).then( ->
-#       avrcp.connectHandsfree().then(null
-#         avrcp.createOBEXSession('pbap').then( ->
-#           avrcp.getPhoneBook()
+#     phony.selectDevice(a).then( ->
+#       phony.connectHandsfree().then(null
+#         phony.createOBEXSession('pbap').then( ->
+#           phony.getPhoneBook()
 #         )
-#         avrcp.createOBEXSession('map').then( ->
-#           avrcp.getMessages('inbox').then((msgs) ->
+#         phony.createOBEXSession('map').then( ->
+#           phony.getMessages('inbox').then((msgs) ->
 #           )
 #         )
 #
 #       ,console.log)
-# #     avrcp.getMediaPlayer().then((mp) ->
+# #     phony.getMediaPlayer().then((mp) ->
 # #       mp.next()
 # #       mp.getTrack().then((track) ->
 # #         console.log track
