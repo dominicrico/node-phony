@@ -11,10 +11,10 @@ vCard = require 'vcard-json'
 #
 # @example How to use
 #   phony = new Phony()
-#     phony.on('ready', ->
-#     phony.setPairable(true)
-#     phony.setDiscoverable(true).then(() ->
-#       phony.discovery(true)
+#   phony.on('ready', ->
+#   phony.setPairable(true)
+#   phony.setDiscoverable(true).then(() ->
+#     phony.discovery(true)
 #       setTimeout(->
 #         phony.discovery(false)
 #       , 50000)

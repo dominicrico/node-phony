@@ -1,13 +1,16 @@
 {
   "name": "node-phony",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Package to communitcate with the Bluetooth AVRCP and HFP protocol",
   "main": "dist/phony.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
-    "avrcp"
+    "phony",
+    "avrcp",
+    "hfp",
+    "bluetooth"
   ],
   "author": "Dominic Rico Gómez <hello@coderocket.me>",
   "license": "MIT",
@@ -15,7 +18,8 @@
     "coffee-script": "^1.12.4",
     "dbus": "^1.0.0",
     "debug": "^2.6.3",
-    "promise": "^7.1.1"
+    "promise": "^7.1.1",
+    "vcard-json": "^0.5.2"
   },
   "devDependencies": {}
 }
