@@ -402,3 +402,5 @@ Phony = (function(superClass) {
 })(EventEmitter);
 
 utils = require('./utils')(Phony);
+
+module.exports = Phony;

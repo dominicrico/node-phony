@@ -462,6 +462,8 @@ class Phony extends EventEmitter
 # @message Put the utils to the end so we can use the class variables
 utils = require('./utils')(Phony)
 
+module.exports = Phony
+
 # phony = new Phony()
 # phony.on('ready', ->
 #   phony.setPairable(true)
