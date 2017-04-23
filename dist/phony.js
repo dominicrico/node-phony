@@ -116,28 +116,22 @@ Phony = (function(superClass) {
   };
 
   Phony.prototype.selectDevice = function(device) {
-    debug("Selecting device \"" + device.device.Name + "\"");
-    debug("Available Services:", utils.getServiceNames(device.device.UUIDs));
+    debug("Selecting device");
     return new Promise((function(_this) {
       return function(resolve, reject) {
         return utils.getInterface(_this, device.path, 'org.bluez.Device1').then(function(iface) {
           _this.device = iface;
           _this.device.setProperty('Trusted', true);
-          if (device.device.Connected !== true) {
-            debug("Trying to connect to \"" + device.device.Name + "\"");
-            _this.device.Connect(function(err) {
-              if (err) {
-                debug("Error while connecting: " + err);
-                return reject(err);
-              } else {
-                debug("Connection to \"" + device.device.Name + "\" established");
-                return resolve(true);
-              }
-            });
-          } else {
-            debug("Already connected with \"" + device.device.Name + "\"");
-            return resolve(true);
-          }
+          debug("Trying to connect...");
+          _this.device.Connect(function(err) {
+            if (err) {
+              debug("Error while connecting: " + err);
+              return reject(err);
+            } else {
+              debug("Connection established");
+              return resolve(true);
+            }
+          });
         });
       };
     })(this));

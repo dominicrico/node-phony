@@ -176,27 +176,23 @@ class Phony extends EventEmitter
   #
   # @return {boolean} Promise
   selectDevice: (device) ->
-    debug "Selecting device \"#{device.device.Name}\""
-    debug "Available Services:" , utils.getServiceNames(device.device.UUIDs)
+    debug "Selecting device"
     return new Promise((resolve, reject) =>
       utils.getInterface(@, device.path, 'org.bluez.Device1')
       .then( (iface) =>
         @device = iface
         @device.setProperty('Trusted', true)
 
-        if device.device.Connected isnt true
-          debug "Trying to connect to \"#{device.device.Name}\""
-          @device.Connect((err) ->
-            if err
-              debug "Error while connecting: #{err}"
-              return reject(err)
-            else
-              debug "Connection to \"#{device.device.Name}\" established"
-              return resolve(true)
-          )
-        else
-          debug "Already connected with \"#{device.device.Name}\""
-          return resolve(true)
+
+        debug "Trying to connect..."
+        @device.Connect((err) ->
+          if err
+            debug "Error while connecting: #{err}"
+            return reject(err)
+          else
+            debug "Connection established"
+            return resolve(true)
+        )
         return
       )
     )
