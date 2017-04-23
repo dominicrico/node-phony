@@ -179,7 +179,7 @@ class Phony extends EventEmitter
     debug "Selecting device \"#{device.device.Name}\""
     debug "Available Services:" , utils.getServiceNames(device.device.UUIDs)
     return new Promise((resolve, reject) =>
-      utils.getInterface(@, device.path, device.interface)
+      utils.getInterface(@, device.path, 'org.bluez.Device1')
       .then( (iface) =>
         @device = iface
         @device.setProperty('Trusted', true)
@@ -464,34 +464,37 @@ utils = require('./utils')(Phony)
 
 module.exports = Phony
 
-# phony = new Phony()
-# phony.on('ready', ->
-#   phony.setPairable(true)
-#   phony.setDiscoverable(true)
-# )
-#
-# phony.on('propertiesChanged', (a) ->
-#   console.log a.args[0]
-# )
-#
-# phony.on('deviceFound', (a) ->
-#   if a.device.Name.indexOf('Galaxy') isnt -1
-#     phony.selectDevice(a).then( ->
-#       phony.connectHandsfree().then(null
-#         phony.createOBEXSession('pbap').then( ->
-#           phony.getPhoneBook()
-#         )
-#         phony.createOBEXSession('map').then( ->
-#           phony.getMessages('inbox').then((msgs) ->
-#           )
-#         )
-#
-#       ,console.log)
-# #     phony.getMediaPlayer().then((mp) ->
-# #       mp.next()
-# #       mp.getTrack().then((track) ->
-# #         console.log track
-# #       )
-# #     )
+phony = new Phony()
+phony.on('ready', ->
+  phony.setPairable(true)
+  phony.setDiscoverable(true)
+)
+
+phony.on('interfacesAdded', (a) ->
+  console.log '######## INTERFACES ADDED ###########'
+)
+phony.on('propertiesChanged', (a) ->
+  console.log a.args[0]
+)
+
+phony.on('deviceFound', (a) ->
+  if a.device.Name.indexOf('Galaxy') isnt -1
+    phony.selectDevice(a).then( ->
+      phony.connectHandsfree().then(null
+        phony.createOBEXSession('pbap').then( ->
+          phony.getPhoneBook()
+        )
+        phony.createOBEXSession('map').then( ->
+          phony.getMessages('inbox').then((msgs) ->
+          )
+        )
+
+      ,console.log)
+#     phony.getMediaPlayer().then((mp) ->
+#       mp.next()
+#       mp.getTrack().then((track) ->
+#         console.log track
+#       )
 #     )
-# )
+    )
+)

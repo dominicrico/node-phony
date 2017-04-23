@@ -69,18 +69,21 @@ module.exports = (Phony) ->
     SERVICE_UUIDS: service_uuids
 
     getServiceNames: (uuids) ->
-      serviceNames = []
-      uuids.forEach((uuid) ->
-        Object.keys(service_uuids).forEach((service) ->
-          if service_uuids[service].toLowerCase() is uuid
-            o = {}
-            o[service] = uuid
-            serviceNames.push(o)
+      if uuids
+        serviceNames = []
+        uuids.forEach((uuid) ->
+          Object.keys(service_uuids).forEach((service) ->
+            if service_uuids[service].toLowerCase() is uuid
+              o = {}
+              o[service] = uuid
+              serviceNames.push(o)
+            return
+          )
           return
         )
-        return
-      )
-      return serviceNames
+        return serviceNames
+      else
+        return []
 
     parseSignal: (phony, path, iface, signal, args) ->
       signalDebug "Received Signal \"#{signal}\" from #{args[0]}"

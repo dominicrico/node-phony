@@ -75,18 +75,22 @@ module.exports = function(Phony) {
     SERVICE_UUIDS: service_uuids,
     getServiceNames: function(uuids) {
       var serviceNames;
-      serviceNames = [];
-      uuids.forEach(function(uuid) {
-        Object.keys(service_uuids).forEach(function(service) {
-          var o;
-          if (service_uuids[service].toLowerCase() === uuid) {
-            o = {};
-            o[service] = uuid;
-            serviceNames.push(o);
-          }
+      if (uuids) {
+        serviceNames = [];
+        uuids.forEach(function(uuid) {
+          Object.keys(service_uuids).forEach(function(service) {
+            var o;
+            if (service_uuids[service].toLowerCase() === uuid) {
+              o = {};
+              o[service] = uuid;
+              serviceNames.push(o);
+            }
+          });
         });
-      });
-      return serviceNames;
+        return serviceNames;
+      } else {
+        return [];
+      }
     },
     parseSignal: function(phony, path, iface, signal, args) {
       signalDebug("Received Signal \"" + signal + "\" from " + args[0]);
