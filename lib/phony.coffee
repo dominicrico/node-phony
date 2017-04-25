@@ -461,35 +461,3 @@ class Phony extends EventEmitter
 utils = require('./utils')(Phony)
 
 module.exports = Phony
-
-phony = new Phony()
-phony.on('ready', ->
-  phony.setPairable(true)
-  phony.setDiscoverable(true)
-)
-
-phony.on('propertiesChanged', (a) ->
-  console.log a.args[0]
-)
-
-phony.on('deviceFound', (a) ->
-  if a.device.Name.indexOf('Galaxy') isnt -1
-    phony.selectDevice(a).then( ->
-      # phony.connectHandsfree().then(null
-      #   phony.createOBEXSession('pbap').then( ->
-      #     phony.getPhoneBook()
-      #   )
-      #   phony.createOBEXSession('map').then( ->
-      #     phony.getMessages('inbox').then((msgs) ->
-      #     )
-      #   )
-      #
-      # ,console.log)
-      phony.getMediaPlayer().then((mp) ->
-        mp.next()
-        mp.getTrack().then((track) ->
-          console.log track
-        )
-      )
-    )
-)
