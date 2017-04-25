@@ -90,13 +90,17 @@ module.exports = (Phony) ->
       signalDebug args
       signalDebug path
       signalDebug iface
-      args.splice(0, 1) if args.length > 1
+
       signal = signal.charAt(0).toLowerCase() + signal.substring(1)
-      phony.emit(signal, {
-        interface: iface,
-        args: args,
-        path: path,
-      })
+      if args[0] is 'org.bluez.MediaPlayer1' and args[1].hasOwnProperty('Track')
+        phony.media.emit('trackChanged', args[1].Track)
+      else
+        args.splice(0, 1) if args.length > 1
+        phony.emit(signal, {
+          interface: iface,
+          args: args,
+          path: path,
+        })
 
     registerHandlers: (phony) ->
       debug "Registering handlers..."

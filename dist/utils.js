@@ -97,15 +97,19 @@ module.exports = function(Phony) {
       signalDebug(args);
       signalDebug(path);
       signalDebug(iface);
-      if (args.length > 1) {
-        args.splice(0, 1);
-      }
       signal = signal.charAt(0).toLowerCase() + signal.substring(1);
-      return phony.emit(signal, {
-        "interface": iface,
-        args: args,
-        path: path
-      });
+      if (args[0] === 'org.bluez.MediaPlayer1' && args[1].hasOwnProperty('Track')) {
+        return phony.media.emit('trackChanged', args[1].Track);
+      } else {
+        if (args.length > 1) {
+          args.splice(0, 1);
+        }
+        return phony.emit(signal, {
+          "interface": iface,
+          args: args,
+          path: path
+        });
+      }
     },
     registerHandlers: function(phony) {
       debug("Registering handlers...");
