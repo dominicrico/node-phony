@@ -217,6 +217,14 @@ class Phony extends EventEmitter
 
   mediaPlayerControls = (player) ->
     return {
+      status: () ->
+        return new Promise((resolve, reject) ->
+          player.getProperty('Status', (err, status) ->
+            return reject(err) if err
+            return resolve(status)
+          )
+          return
+        )
       play: () ->
         mpDebug('play')
         player.Play()

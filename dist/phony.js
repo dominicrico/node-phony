@@ -155,6 +155,16 @@ Phony = (function(superClass) {
 
   mediaPlayerControls = function(player) {
     return {
+      status: function() {
+        return new Promise(function(resolve, reject) {
+          player.getProperty('Status', function(err, status) {
+            if (err) {
+              return reject(err);
+            }
+            return resolve(status);
+          });
+        });
+      },
       play: function() {
         mpDebug('play');
         return player.Play();
