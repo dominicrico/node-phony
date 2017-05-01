@@ -19,7 +19,7 @@
     "dbus": "^1.0.0",
     "debug": "^2.6.3",
     "promise": "^7.1.1",
-    "vcard-json": "^0.5.2"
+    "vcard-json": "git://github.com/dominicrico/vcard-json.git"
   },
   "devDependencies": {}
 }
